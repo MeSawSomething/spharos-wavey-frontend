@@ -4,6 +4,7 @@ import DetailHeader from "./DetailHeader";
 import BottomFixedContainer from "@/components/layouts/BottomFixedContainer";
 import Button from "@/components/ui/Button";
 import Swal from "sweetalert2";
+import axios from "axios";
 
 export default function DetailLayout(props: { children: React.ReactNode }) {
   const router = useRouter();
@@ -17,7 +18,7 @@ export default function DetailLayout(props: { children: React.ReactNode }) {
     sessionStorage.setItem("carDetail", `car/${cid}`);
     router.push("/login");
   };
-  
+
   const swalPopLoginToGo = () => {
     Swal.fire({
       text: "로그인이 필요합니다.",
@@ -28,7 +29,31 @@ export default function DetailLayout(props: { children: React.ReactNode }) {
       timer: 3000,
       timerProgressBar: false,
     });
-    }
+  };
+
+  
+  const handleCheckCanBook = () => {
+    // 예약가능여부 확인 api
+    alert("예약가능여부 해당 스텝에서 확인");
+
+    // const getCanBook = async () => {
+    //   const token = "Bearer " + localStorage.getItem("Authorization");
+    //   const uid = localStorage.getItem("uid");
+    //   await fetch(
+    //     `https://api-billita.xyz/rental/can-rental`, {
+    //       method: "GET",
+    //       headers: {
+    //         Authorization: token,
+    //         uid: uid,
+    //     },
+    //   })
+    //   .then((res) => {
+    //     console.log(res);
+    //     if(res.status === true) // 이건 res 찍어보고 수정해야함
+    //       console.log("예약가능");
+    //   })
+      
+  };
 
   const isLogin = () => {
     if (
@@ -38,6 +63,7 @@ export default function DetailLayout(props: { children: React.ReactNode }) {
       swalPopLoginToGo();
       handleLoginPage();
     } else {
+      handleCheckCanBook();
       handleLicensePage();
     }
   };

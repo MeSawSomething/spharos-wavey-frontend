@@ -220,6 +220,7 @@ export default function LicenseWrapper() {
 
   return (
     <section>
+      <button onClick={()=> router.push(`/car/${router.query.cid}/book`)}>다음페이지로 넘어가는 Test용 버튼</button>
       <FormGroup>
         <SectionTitle fontSize={0.85}>운전면허 정보입력</SectionTitle>
         <Separator gutter={1} />

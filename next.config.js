@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: true,
+  reactStrictMode: false,
   env: {
     KAKAO_CLIENT_ID: process.env.KAKAO_CLIENT_ID,
     KAKAO_CLIENT_SECRET: process.env.KAKAO_CLIENT_SECRET,

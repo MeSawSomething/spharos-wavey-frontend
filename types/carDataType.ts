@@ -89,5 +89,5 @@ export interface BookListDataType {
   endDate : string
   billitaZone : string,
   imageUrl : string,
-  insuranceId : number,
+  insuranceId : number, //reward 넣어야함
 }

@@ -52,7 +52,7 @@ export default function CarBook() {
         const requestBody = {
           vehicleId: router.query.cid,
           startDate: "2023-05-21 20:00",
-          endDate: "2023-05-21 22:00"
+          endDate: "2023-05-21 22:00",
         };
         const res = await axios.post(
           `https://api-billita.xyz/booklist`,
@@ -65,6 +65,7 @@ export default function CarBook() {
         );
         const data = res.data;
         setBookId(data.bookId);
+        sessionStorage.setItem("bookId", String(data.bookId));
         console.log(data);
         
       } catch (err) {
@@ -75,6 +76,58 @@ export default function CarBook() {
   },[])
   console.log(`bookId: ${bookId}`)
 
+  
+  useEffect(() => {
+    const handleBeforeUnload = async () => {
+      const deleteData = async () => {
+        const token = "Bearer " + localStorage.getItem("Authorization");
+        try {
+          const res = await axios.delete(
+            `https://api-billita.xyz/booklist/${bookId}`,
+            {
+              headers: {
+                Authorization: token,
+              },
+            }
+          );
+          console.log("Delete BookID", res);
+        } catch (err) {
+          console.log(err);
+        }
+      };
+      deleteData();
+      console.log("handleBeforeUnload test")
+    };
+
+    // const handleRouteChange = () => {
+    //   const deleteData = async () => {
+    //     const token = "Bearer " + localStorage.getItem("Authorization");
+    //     try {
+    //       const res = await axios.delete(
+    //         `https://api-billita.xyz/booklist/62`,
+    //         {
+    //           headers: {
+    //             Authorization: token,
+    //           },
+    //         }
+    //       );
+    //       console.log("Delete BookID", res);
+    //     } catch (err) {
+    //       console.log(err);
+    //     }
+    //   };
+    //   deleteData();
+    // };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    // router.events.on("routeChangeStart", handleRouteChange);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+      // router.events.off("routeChangeStart", handleRouteChange);
+    };
+  }, []);
+  
   return (
     <>
       {drawer && (
@@ -146,7 +199,7 @@ export default function CarBook() {
             <BottomFixedContainer>
               <Button
                 btnType={"button"}
-                btnEvent={() => alert("next")}
+                btnEvent={() => router.push(`/car/${router.query.cid}/payment`)}
                 shadow={true}
                 color={"var(--billita-blueHighlight)"}
                 border="1px solid var(--billita-blueHighlight)"
