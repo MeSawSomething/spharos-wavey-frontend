@@ -1,6 +1,20 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: false,
+  reactStrictMode: true,
+
+const runtimeCaching = require("next-pwa/cache");
+const withPWA = require("next-pwa")({
+    dest: "public",
+    register: true,
+    skipWaiting: true,
+    runtimeCaching,
+    buildExcludes: [/middleware-manifest.json$/],
+    mode: 'production',
+    disableDevLogs: true,
+});
+
+const nextConfig =  withPWA({
+  reactStrictMode: true,
   env: {
     KAKAO_CLIENT_ID: process.env.KAKAO_CLIENT_ID,
     KAKAO_CLIENT_SECRET: process.env.KAKAO_CLIENT_SECRET,
@@ -9,6 +23,6 @@ const nextConfig = {
   images: {
     domains: ["i.ibb.co", "www.tesla.com", "storage.googleapis.com"],
   },
-};
+});
 
 module.exports = nextConfig;

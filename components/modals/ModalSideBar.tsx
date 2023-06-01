@@ -159,6 +159,9 @@ const RentCarNonExist = () => {
   return (
     <div className={style.grayWrapper}>
       <div className={style.nonRentNotice}>
+        <SectionTitle fontSize={0.8}>
+          현재 대여중인 차량이 없습니다.
+        </SectionTitle>
       </div>
     </div>
   );
