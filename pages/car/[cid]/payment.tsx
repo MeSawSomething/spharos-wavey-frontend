@@ -1,7 +1,8 @@
-import { BookListDataType } from "@/types/carDataType";
-import axios from "axios";
-import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import axios from "axios";
+import { BookListDataType } from "@/types/carDataType";
+import PageLoader from "@/components/ui/PageLoader";
 
 export default function payment() {
   const router = useRouter();
@@ -9,6 +10,7 @@ export default function payment() {
   const [bookIdData, setBookIdData] = useState<string | null>();
   const [bookData, setBookData] = useState<BookListDataType>();
   const [uidData, setUidData] = useState<string>();
+  const [userToken, setUserToken] = useState<string>();
 
   const state = {
     next_redirect_pc_url: "",
@@ -18,8 +20,12 @@ export default function payment() {
 
   useEffect(() => {
     const uid = localStorage.getItem("uid");
+    const token = localStorage.getItem("Authorization");
     if (uid !== undefined && uid !== null) {
       setUidData(uid);
+    }
+    if (token !== undefined && token !== null) {
+      setUserToken(token);
     }
   }, []);
 
@@ -43,66 +49,53 @@ export default function payment() {
       getBookData();
     }
   }, [bookIdData]);
-  
-  const requestParameter = {
-    cid: "TC0ONETIME",
-    partner_order_id: "partner_order_id",
-    partner_user_id: "partner_user_id",
-    item_name: bookData?.carName,
-    quantity: 1,
-    total_amount: bookData?.defaultPrice,
-    tax_free_amount: 0,
-    approval_url: `${process.env.NEXT_PUBLIC_BASE_URL}/purchase/approval`,
-    fail_url: `${process.env.NEXT_PUBLIC_BASE_URL}/purchase/fail`,
-    cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL}/purchase/cancel`,
+
+  const readyRequestBody = {
+    uuid: uidData,
+    vehicleId: Number(vehicleId),
+    carName: bookData?.carName,
+    carBrandName: bookData?.carBrand,
+    startDate: bookData?.startDate,
+    endDate: bookData?.endDate,
+    startZone: 1, //typeError
+    returnZone: 1,
+    price: bookData?.defaultPrice, //추후 바꿔야함
+    insuranceId: bookData?.insuranceId,
+    reward: 1000,
   };
 
-  console.log("RequestParameter", requestParameter);
+  console.log("readyRequestBody", readyRequestBody);
 
   useEffect(() => {
     const bookId = sessionStorage.getItem("bookId");
     if (bookId !== undefined) {
       setBookIdData(bookId);
       console.log("결제페이지에서 예약번호조회11", bookIdData, bookId);
-      console.log(typeof bookIdData);
     }
   }, []);
 
   useEffect(() => {
-    const getPaymentReady = async () => {
-      console.log("test");
-      const res = await axios.post(
-        `https://kapi.kakao.com/v1/payment/ready`,
-        requestParameter,
-        {
-          headers: {
-            Authorization: `KakaoAK ${process.env.NEXT_PUBLIC_KAKAO_ADMIN_KEY}`,
-            "Content-type": "application/x-www-form-urlencoded;charset=utf-8",
-          },
-        }
-      );
-      console.log(res);
-      state.next_redirect_pc_url = res.data.next_redirect_pc_url;
-      state.tid = res.data.tid;
-      state.params = res.data.params;
-      console.log(state);
-      window.location.href = state.next_redirect_pc_url;
-    };
-    getPaymentReady();
+    if (bookData !== undefined) {
+      const getPaymentReady = async () => {
+        console.log(readyRequestBody);
+        console.log(userToken);
+        const res = await axios.post(
+          `https://api-billita.xyz/purchase/kakao/ready`,
+          readyRequestBody,
+          {
+            headers: {
+              Authorization: userToken,
+            },
+          }
+        );
+        sessionStorage.setItem("tid", res.data.tid);
+        console.log(res.data.purchaseNumber);
+        sessionStorage.setItem("purchaseNumber", res.data.purchaseNumber);
+        router.push(res.data.next_redirect_pc_url)
+      };
+      getPaymentReady();
+    }
   }, [bookData]);
-
-  const paymentRequestBody = {
-    uuid: uidData,
-    vehicleId: vehicleId,
-    carName: bookData?.carName,
-    carBrandName: bookData?.carBrand,
-    startDate: bookData?.startDate,
-    endDate: bookData?.endDate,
-    startZone: bookData?.billitaZone,
-    returnZone: bookData?.billitaZone,
-    price: bookData?.defaultPrice, //추후 바꿔야함
-    insuranceId: bookData?.insuranceId,
-  };
 
   return <div>payment test page</div>;
 }
