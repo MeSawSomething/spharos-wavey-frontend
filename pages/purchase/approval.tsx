@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import router, { useRouter } from "next/router";
 import axios from "axios";
 
-export default function paysuccess() {
+export default function Paysuccess() {
   const [purchasNo, setPurchaseNo] = useState<string>();
   const [userToken, setUserToken] = useState<string>();
   const router = useRouter();

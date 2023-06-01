@@ -4,7 +4,7 @@ import axios from "axios";
 import { BookListDataType } from "@/types/carDataType";
 import PageLoader from "@/components/ui/PageLoader";
 
-export default function payment() {
+export default function Payment() {
   const router = useRouter();
   const vehicleId = router.query.cid;
   const [bookIdData, setBookIdData] = useState<string | null>();
