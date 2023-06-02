@@ -7,7 +7,7 @@ export default function BookCar() {
   
   return (
     <main>
-      {/* <CarBook /> */}
+      <CarBook />
     </main>
   );
 }
@@ -15,3 +15,5 @@ export default function BookCar() {
 BookCar.getLayout = function getLayout(Page: React.ReactNode) {
   return <SimpleBackLayout title="예약 확인">{Page}</SimpleBackLayout>;
 };
+
+BookCar.auth = true;

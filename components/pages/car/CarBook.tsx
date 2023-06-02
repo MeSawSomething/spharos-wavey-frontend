@@ -146,7 +146,7 @@ export default function CarBook() {
             <BottomFixedContainer>
               <Button
                 btnType={"button"}
-                btnEvent={() => alert("next")}
+                btnEvent={() => router.push(`/car/${router.query.cid}/payment`)}
                 shadow={true}
                 color={"var(--billita-blueHighlight)"}
                 border="1px solid var(--billita-blueHighlight)"

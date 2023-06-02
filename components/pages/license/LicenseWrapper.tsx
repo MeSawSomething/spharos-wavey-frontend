@@ -21,17 +21,9 @@ import { Co2Sharp } from "@mui/icons-material";
 import Swal from "sweetalert2";
 export default function LicenseWrapper() {
   const router = useRouter();
-
+  console.log(router);
   const [token, setToken] = useState<string | null>();
 
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      localStorage.getItem("Authorization")
-        ? setToken(localStorage.getItem("Authorization"))
-        : router.push("/login");
-      return;
-    }
-  }, []);
 
   const [inputError, setInputError] = useState<LicenseInputType>({
     level: "",
@@ -223,6 +215,7 @@ export default function LicenseWrapper() {
       <FormGroup>
         <SectionTitle fontSize={0.85}>운전면허 정보입력</SectionTitle>
         <Separator gutter={1} />
+        <button onClick={() => router.push(`/car/${router.query.cid}/book`)}>테스트용 넘어가기 버튼</button>
         <Box sx={{ width: "100%" }}>
           <FormControl variant="standard" fullWidth>
             <InputLabel id="demo-simple-select-standard-label">

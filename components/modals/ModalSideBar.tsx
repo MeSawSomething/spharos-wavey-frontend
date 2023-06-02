@@ -1,6 +1,8 @@
 import * as React from "react";
 import { useState, Dispatch, SetStateAction, useEffect } from "react";
 import Image from "next/image";
+import { useRecoilState } from "recoil";
+import { authState } from "@/state/authState";
 import style from "./ModalSideBar.module.css";
 import SectionTitle from "../ui/SectionTitle";
 import Separator from "../ui/Separator";
@@ -18,6 +20,7 @@ export default function ModalSideBar(props: {
 }) {
   const [isLogin, setIsLogin] = useState<boolean>(false);
   const { isSideOpen, setIsSideOpen } = props;
+  const [auth, setAuth] = useRecoilState(authState);
   const [rentCarData, setRentCarData] = useState<MyRentalCarType[]>(
     [] as MyRentalCarType[]
   );
@@ -26,11 +29,17 @@ export default function ModalSideBar(props: {
   const PURCASE_STATE = "RESERVATION";
 
   const handleLogout = () => {
-    localStorage.removeItem("Authorization");
-    localStorage.removeItem("uid");
-    localStorage.removeItem("nickName");
     sessionStorage.removeItem("carDetail");
+    localStorage.clear();
     setIsSideOpen(false);
+    setAuth({
+      auth: false,
+      nickName: "",
+      profileImageUrl: "",
+      token: "",
+      uid: "",
+      email: "",
+    });
     Swal.fire({
       text: "로그아웃 되었습니다.",
       icon: "success",

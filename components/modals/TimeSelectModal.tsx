@@ -25,21 +25,21 @@ export default function TimeSelect({ setTimeModal, timeModal }: timeModalType) {
   const setReqTime = useSetRecoilState<timeType>(nowTimeState);
 
   const timeModalHandler = () => {
-    if(startTime.isAfter(endTime)) {
+    if (startTime.isAfter(endTime)) {
       return;
-    } else if(startTime.isSame(endTime)) {
+    } else if (startTime.isSame(endTime)) {
       return;
-    } else if(startTime.isBefore(currentTime)) {
+    } else if (startTime.isBefore(currentTime)) {
       return;
     }
 
     Swal.fire({
-      text: "시간 설정이 변경되었습니다.",
+      text: "시간 설정이 변경되었습니다. 차량을 선택해주세요.",
       icon: "success",
       toast: true,
       position: "top",
       showConfirmButton: false,
-      timer: 1000,
+      timer: 2000,
       timerProgressBar: true,
     });
 
@@ -50,9 +50,16 @@ export default function TimeSelect({ setTimeModal, timeModal }: timeModalType) {
   };
 
   return (
-    <div className={!timeModal? style.open : style.close}>
-    <BottomFixedContainer backgroundColor="white" radius={true}>
-        <div style={{ padding: "1rem", display: 'flex', justifyContent: 'space-between' , alignItems: 'center'}}>
+    <div className={!timeModal ? style.open : style.close}>
+      <BottomFixedContainer backgroundColor="white" radius={true}>
+        <div
+          style={{
+            padding: "1rem",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
           <MobileDateTimePicker
             format={"YYYY/MM/DD HH:mm"}
             value={startTime}
@@ -68,11 +75,11 @@ export default function TimeSelect({ setTimeModal, timeModal }: timeModalType) {
             minDateTime={startTime.add(1, "hour").startOf("minute")}
           />
         </div>
-      
-        <Button btnType="button" btnEvent={()=>timeModalHandler()}>
+
+        <Button btnType="button" btnEvent={() => timeModalHandler()}>
           시간 설정
         </Button>
-    </BottomFixedContainer>
+      </BottomFixedContainer>
     </div>
   );
 }

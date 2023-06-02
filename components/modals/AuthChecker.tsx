@@ -5,6 +5,10 @@ import PageLoader from '../ui/PageLoader';
 export default function AuthChecker() {
 
   const router = useRouter();
+  const targetUrl = router.asPath;
+  console.log(`targetUrl : ${targetUrl}`)
+  localStorage.setItem("target", targetUrl);
+  
   useEffect(() => {
     // 3초 후에 로그인 페이지로 이동
     const interval = setInterval(() => {

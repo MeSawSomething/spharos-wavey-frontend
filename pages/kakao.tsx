@@ -17,23 +17,45 @@ export default function Kakao() {
   const REST_API_KEY = process.env.NEXT_PUBLIC_KAKAO_REST_API_KEY;
   const CLIENT_ID = process.env.NEXT_PUBLIC_KAKAO_REST_API_KEY;
   //const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=code`;
+  const CONTETNt_TYPE = "application/x-www-form-urlencoded;charset=utf-8";
+  const [targetUrlData, setTargetUrlData] = React.useState<string>("/");
 
   useEffect(() => {
-    
+    const targetUrl:string|null = sessionStorage.getItem("targetUrl");
+    if (targetUrl !== null && targetUrl !== undefined) {
+      setTargetUrlData(targetUrl);
+      console.log("xxxxxx", targetUrlData)
+    }
+  }, []);
+
+  const payload = qs.stringify({
+    grant_type: "authorization_code",
+    client_id: REST_API_KEY,
+    redirect_uri: REDIRECT_URI,
+    code: authCode,
+    client_secret: CLIENT_ID,
+  });
+
+  const handlePath = () => {
+    const targetUrl = sessionStorage.getItem("targetUrl");
+    console.log(targetUrl);
+  
+    if (targetUrl !== null && targetUrl !== undefined) {
+      console.log("zzzzzz", targetUrl);
+      router.push(targetUrl);
+    } else {
+      router.push("/");
+    }
+  };
+
+  useEffect(() => {
     const getToken = async () => {
-      const payload = qs.stringify({
-        grant_type: "authorization_code",
-        client_id: REST_API_KEY,
-        redirect_uri: REDIRECT_URI,
-        code: authCode,
-        client_secret: CLIENT_ID,
-      });
 
       try {
         const res = await fetch("https://kauth.kakao.com/oauth/token", {
           method: "POST",
           headers: {
-            "Content-Type": "application/x-www-form-urlencoded;charset=utf-8",
+            "Content-Type": CONTETNt_TYPE,
           },
           body: payload,
         });
@@ -45,15 +67,14 @@ export default function Kakao() {
           const res = await fetch("https://kapi.kakao.com/v2/user/me", {
             method: "GET",
             headers: {
-              "Content-Type": "application/x-www-form-urlencoded;charset=utf-8",
+              "Content-Type": CONTETNt_TYPE,
               Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
           });
           const data = await res.json();
           localStorage.setItem("nickName", data.properties.nickname);
-          console.log(data)
+          console.log(data);
           try {
-            
             axios
               .post("https://api-billita.xyz/auth/login", {
                 email: data.kakao_account.email,
@@ -65,7 +86,10 @@ export default function Kakao() {
                 localStorage.setItem("Authorization", jwtToken);
                 localStorage.setItem("uid", res.headers.uid);
                 localStorage.setItem("nickName", data.properties.nickname);
-                localStorage.setItem("profileImageUrl", data.properties.profile_image);
+                localStorage.setItem(
+                  "profileImageUrl",
+                  data.properties.profile_image
+                );
                 localStorage.setItem("email", data.kakao_account.email);
                 console.log(data.properties.nickname);
                 console.log(data.properties.profile_image);
@@ -78,7 +102,8 @@ export default function Kakao() {
                   uid: res.headers.uid,
                   email: data.kakao_account.email,
                 });
-                router.push("/");
+
+                handlePath();
               })
               .catch((err) => router.push("/login"));
           } catch (err) {
@@ -106,4 +131,4 @@ export default function Kakao() {
       </Stack>
     </Box>
   );
-};
+}
