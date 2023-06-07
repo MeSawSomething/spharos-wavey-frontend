@@ -16,6 +16,7 @@ export default function SimpleBackLayout(props: {
   const pageUrl = router.pathname;
   const [auth, setAuth] = useRecoilState(authState);
   const authValue = auth.auth;
+  console.log(authValue);
 
   useEffect(() => {
     if (!auth.auth && AuthRecoilChecker()&&typeof window !== 'undefined') {
