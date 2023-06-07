@@ -15,6 +15,7 @@ export default function SimpleBackLayout(props: {
 
   const pageUrl = router.pathname;
   const [auth, setAuth] = useRecoilState(authState);
+  const authValue = auth.auth;
 
   useEffect(() => {
     if (!auth.auth && AuthRecoilChecker()&&typeof window !== 'undefined') {
@@ -35,7 +36,7 @@ export default function SimpleBackLayout(props: {
       return;
     }
     router.back();
-    if(auth.auth && pageUrl === "/login") {
+    if(authValue && pageUrl === "/login") {
       window.history.go(-1);
     }
   }
