@@ -20,7 +20,7 @@ import Swal from "sweetalert2";
 
 export default function RentalWrapper(props: { rentId: string }) {
   const router = useRouter();
-  const rentId:string = props.rentId;
+  const rentId: string = props.rentId;
   const [drawer, setDrawer] = useState<boolean>(false);
   const [vehicleData, setVehicleData] = useState<carDataType>();
   const auth = useRecoilValue(authState);
@@ -58,7 +58,7 @@ export default function RentalWrapper(props: { rentId: string }) {
           uid: auth.uid,
         },
       });
-        
+
       const myRentalData: RentalDetailType = result.data;
       setRentData(myRentalData);
     };
@@ -90,7 +90,14 @@ export default function RentalWrapper(props: { rentId: string }) {
   // const rentData = props.rentData;
   return (
     <main>
-      <Smartkey isOpen={isSmartkeyOpen} setIsOpen={setIsSmartkeyOpen} />
+      {carBrand && carName && (
+        <Smartkey
+          isOpen={isSmartkeyOpen}
+          setIsOpen={setIsSmartkeyOpen}
+          carBrand={carBrand}
+          carName={carName}
+        />
+      )}
       {drawer && (
         <Drawer
           open={drawer}

@@ -60,7 +60,7 @@ export default function DetailLayout(props: { children: React.ReactNode }) {
             btnEvent={() => setIsLicense(true)}
             shadow={true}
           >
-            면허정보확인
+            면허정보 확인
           </Button>
         </BottomFixedContainer>
       ) : auth.auth && !canUserRent ? null : (

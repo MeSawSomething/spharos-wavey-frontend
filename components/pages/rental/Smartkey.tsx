@@ -18,6 +18,8 @@ import ModalForm from "@/components/modals/ModalForm";
 export default function Smartkey(props: {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  carBrand: string;
+  carName: string;
 }) {
   const router = useRouter();
   const [drawer, setDrawer] = React.useState(false);
@@ -143,11 +145,10 @@ export default function Smartkey(props: {
         </div>
 
         <div className={style.carInfoWrap}>
-          <div className={style.carBrand}>Tesla</div>
-          <div className={style.carName}>Model 3</div>
+          <div className={style.carBrand}>{props.carBrand}</div>
+          <div className={style.carName}>{props.carName}</div>
           <div className={style.carEtc}>
             <div>부산 허 3523</div>
-            <div>75%</div>
           </div>
         </div>
 
