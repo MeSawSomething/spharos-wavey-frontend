@@ -38,7 +38,7 @@ export default function DetailLayout(props: { children: React.ReactNode }) {
     } else {
       return;
     }
-  }, [auth.uid]);
+  }, [auth.uid, API_URL, TOKEN, auth.auth, setCanUserRent]);
 
   const handleCheckNextStep = () => {
     if (!auth.auth && typeof window !== "undefined") {

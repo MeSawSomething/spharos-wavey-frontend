@@ -76,7 +76,7 @@ export default function CarBook(props: { carData: carDataType }) {
       }
     };
     postBookData();
-  }, []);
+  }, [API_URL, auth.token]);
 
   const handlePaymentReady = () => {
     setNextDrawer(false);

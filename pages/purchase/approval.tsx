@@ -55,7 +55,7 @@ const Paysuccess = (props: {pg_token:string}) => {
     if(isRedirect === undefined || isRedirect === null) return;
     router.push(`/rental/${isRedirect}`);
     return;
-  },[isRedirect])
+  },[isRedirect, router])
 
 
   return (

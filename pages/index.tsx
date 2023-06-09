@@ -53,7 +53,7 @@ function Page(props: { data: brandSortType[]; }) {
         profileImageUrl: localStorage.getItem("profileImageUrl") as string,
       });
     }
-  }, [auth.auth]);
+  }, [setAuth, auth.auth]);
   
   useEffect(()=> {
     if(typeof window !== undefined) {

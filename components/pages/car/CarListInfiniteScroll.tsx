@@ -8,7 +8,7 @@ import { redirectionUrlState } from "@/state/redirectionState";
 import { useEffect, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import DataLoader from "@/components/ui/DataLoader";
-import PageLoader from "@/components/ui/PageLoader";
+import ActionToTopBtn from "@/components/ui/ActionToTopBtn";
 
 export default function CarListInfiniteScroll(props:{ }) {
   
@@ -45,6 +45,7 @@ export default function CarListInfiniteScroll(props:{ }) {
 
   return (
     <>
+    <ActionToTopBtn />
       <div className={style.listHeader}>
         <div className={style.listTitle}>
           <span>빌리타</span>에서 빌려타는 기회!
