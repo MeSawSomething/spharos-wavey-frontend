@@ -3,38 +3,43 @@ import Image from "next/image";
 import style from "./ActionToTopBtn.module.css";
 
 export default function CloseOrSlideBtn(props: { onClick?: () => void }) {
-  const [isVisible, setIsVisible] = useState(false);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollY = window.scrollY;
-      const threshold = 300;
-      setIsVisible(scrollY > threshold);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
+   const [scrollY, setScrollY] = useState<number>(0);
+  const [isActive, setIsActive] = useState<boolean>(false);
 
   const handleTopClick = () => {
     window.scrollTo({
       top: 0,
-      behavior: "smooth", // Enable smooth scrolling
+      behavior: "smooth"
     });
   };
 
-  return (
-    <div className={isVisible ? style.actionToTop : `${style.actionToTop} ${style.hidden}`} onClick={handleTopClick}>
-      <div className={style.imgWrap}>
-        <Image
-          src="/assets/images/icons/chevrons-up.svg"
-          width={200}
-          height={200}
-          alt="slideDownBtn"
-        />
-      </div>
+  if (typeof window !== "undefined") {
+    window.addEventListener("scroll", () => {
+      setScrollY(window.scrollY);
+    });
+  }
+
+  useEffect(() => {
+    if (scrollY > 100) {
+      setIsActive(true);
+    } else {
+      setIsActive(false);
+    }
+  }, [scrollY])
+
+
+return (
+  <div className={isActive ? `${style.scrollWrap} ${style.active}` : `${style.scrollWrap} ${style.close}`}>
+    <div className={style.scrollBtn} onClick={handleTopClick}>
+      <Image
+        src="/assets/images/icons/chevrons-up.svg"
+        alt="actionToTopButton"
+        width={20}
+        height={20}
+        priority
+      />
     </div>
-  );
+  </div>
+)
 }

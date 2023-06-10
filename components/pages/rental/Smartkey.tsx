@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useRecoilValue } from "recoil";
@@ -14,6 +14,7 @@ import Drawer from "@mui/material/Drawer";
 import Box from "@mui/material/Box";
 import Button from "@/components/ui/Button";
 import ModalForm from "@/components/modals/ModalForm";
+import ReturnMandatoryTab from "../returned/ReturnMandatoryTab";
 
 export default function Smartkey(props: {
   isOpen: boolean;
@@ -23,12 +24,21 @@ export default function Smartkey(props: {
 }) {
   const router = useRouter();
   const [drawer, setDrawer] = React.useState(false);
+  const [isCheckListOpen, setIsCheckListOpen] = useState<Boolean>(false);
   const reqTime = useRecoilValue<timeType>(nowTimeState);
   const serviceStartTime = new Date(reqTime.startTime);
   const serviceEndTime = new Date(reqTime.endTime);
-  const isUserOpenDoor:boolean = Number(serviceStartTime) - Date.now() <= 15 * 60 * 1000;
-  const is10MinBeforeReturn:boolean = Number(serviceEndTime) - Date.now() <= 10 * 60 * 1000;
-  console.log(serviceEndTime, Number(serviceStartTime), Number(serviceEndTime), isUserOpenDoor, Date.now());
+  const isUserOpenDoor: boolean =
+    Number(serviceStartTime) - Date.now() <= 15 * 60 * 1000;
+  const is10MinBeforeReturn: boolean =
+    Number(serviceEndTime) - Date.now() <= 10 * 60 * 1000;
+  console.log(
+    serviceEndTime,
+    Number(serviceStartTime),
+    Number(serviceEndTime),
+    isUserOpenDoor,
+    Date.now()
+  );
   const AntSwitch = styled(Switch)(({ theme }) => ({
     width: 158,
     height: 35,
@@ -75,18 +85,24 @@ export default function Smartkey(props: {
   }));
   const handleReturned = () => {
     setDrawer(true);
-  }
+  };
   const handleGoCheckList = () => {
     setDrawer(false);
-    router.push(`/rental/${router.query.rentId}/checklist`);
-  }
+    setIsCheckListOpen(!isCheckListOpen);
+    // router.push(`/rental/${router.query.rentId}/checklist`);
+  };
   return (
     <div
       className={style.over}
       style={props.isOpen ? { display: "block" } : { display: "none" }}
     >
-
-{drawer && (
+      {isCheckListOpen && (
+        <ReturnMandatoryTab
+          isCheckListopen={isCheckListOpen}
+          setIsCheckListOpen={setIsCheckListOpen}
+        />
+      )}
+      {drawer && (
         <Drawer
           open={drawer}
           PaperProps={{
@@ -177,14 +193,18 @@ export default function Smartkey(props: {
             </Typography>
           </Stack>
         </div>
-        
+
         {isUserOpenDoor && (
-        <div className={style.notice}>운행시작 15분 전부터 차량도어 제어 가능</div>
+          <div className={style.notice}>
+            운행시작 15분 전부터 차량도어 제어 가능
+          </div>
         )}
         {is10MinBeforeReturn && (
-        <div className={style.notice}>반납시간 10분 전입니다.</div>
+          <div className={style.notice}>반납시간 10분 전입니다.</div>
         )}
-        <div className={style.notice} onClick={()=>handleReturned()}>반납하기</div>
+        <div className={style.notice} onClick={() => handleReturned()}>
+          반납하기
+        </div>
       </div>
     </div>
   );

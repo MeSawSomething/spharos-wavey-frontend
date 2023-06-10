@@ -17,9 +17,9 @@ export default function CarListInMapDrawer(props: {
   const { data, isOpen, setIsOpen, zoneName } = props;
 
   const router = useRouter();
-  const setUrlSettion = useSetRecoilState(redirectionUrlState);
+  const setUrlSession = useSetRecoilState(redirectionUrlState);
   const handleDetail = (id: number) => {
-    setUrlSettion({ redirectUrl: `/map` });
+    setUrlSession({ redirectUrl: `/map` });
     router.push(`/car/${id}`);
   };
 

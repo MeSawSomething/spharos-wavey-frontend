@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useRecoilValue } from "recoil";
 import {
   Box,
   MenuItem,
@@ -10,18 +11,16 @@ import {
   Input,
   FormHelperText,
 } from "@mui/material";
+import Swal from "sweetalert2";
 import SectionTitle from "@/components/ui/SectionTitle";
 import Separator from "@/components/ui/Separator";
 import { LicenseInputType } from "@/types/licenseType";
 import { useRouter } from "next/router";
-import Swal from "sweetalert2";
-import { useRecoilValue } from "recoil";
 import { authState } from "@/state/authState";
 
 import style from "./LicenseWrapper.module.css";
 import CloseBtn from "@/components/ui/CloseBtn";
 import SlideDownBtn from "@/components/ui/SlideDownBtn";
-import CarBook from "../car/CarBook";
 
 export default function LicenseWrapper(props:{isOpen:boolean, setIsOpen:React.Dispatch<React.SetStateAction<boolean>>}) {
 

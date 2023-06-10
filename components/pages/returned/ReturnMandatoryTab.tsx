@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useRecoilValue } from "recoil";
 import Image from "next/image";
@@ -12,7 +12,10 @@ import BottomFixedContainer from "@/components/layouts/BottomFixedContainer";
 import Button from "@/components/ui/Button";
 import { staticReturnQuestionData } from "@/datas/staticReturnQuestionData";
 
-export default function ReturnMandatoryTab() {
+export default function ReturnMandatoryTab(props: {
+  isCheckListopen: Boolean;
+  setIsCheckListOpen: Dispatch<SetStateAction<Boolean>>;
+}) {
   const router = useRouter();
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
   const auth = useRecoilValue(authState);
@@ -97,6 +100,7 @@ export default function ReturnMandatoryTab() {
   };
 
   const handleSwalReturnConfirm = () => {
+    setDrawer(!drawer);
     Swal.fire({
       text: "반납이 완료되었습니다",
       icon: "success",
@@ -127,7 +131,7 @@ export default function ReturnMandatoryTab() {
       <Drawer
         open={drawer}
         PaperProps={{
-          sx: { width: 390, borderTopLeftRadius: 18, borderTopRightRadius: 18 },
+          sx: { borderTopLeftRadius: 18, borderTopRightRadius: 18 },
         }}
         anchor="bottom"
         variant="temporary"
