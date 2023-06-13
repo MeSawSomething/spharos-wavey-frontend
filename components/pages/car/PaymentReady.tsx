@@ -53,6 +53,7 @@ export default function PaymentReady(props: {
         );
         sessionStorage.setItem("purchaseNumber", res.data.purchaseNumber);
         router.push(res.data.next_redirect_mobile_url);
+        // next_redirect_pc_url
       };
       getPaymentReady();
    
