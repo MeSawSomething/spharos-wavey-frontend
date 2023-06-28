@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 import PageLoader from "@/components/ui/PageLoader";
 import { authState } from "@/state/authState";
@@ -37,31 +37,38 @@ export default function PaymentReady(props: {
     reward: 1000,
   };
 
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+
   useEffect(() => {
     const getPaymentReady = async () => {
-      const res = await axios.post(
-        `${API_URL}/purchase/kakao/ready`,
-        readyRequestBody,
-        {
-          headers: {
-            Authorization: TOKEN,
-          },
-        }
-      );
-      sessionStorage.setItem("purchaseNumber", res.data.purchaseNumber);
-      router.push(res.data.next_redirect_mobile_url);
+      try {
+        const res = await axios.post(
+          `${API_URL}/purchase/kakao/ready`,
+          readyRequestBody,
+          {
+            headers: {
+              Authorization: TOKEN,
+            },
+          }
+        );
+        sessionStorage.setItem("purchaseNumber", res.data.purchaseNumber);
+        router.push(res.data.next_redirect_mobile_url);
+      } catch (error) {
+        router.push("/purchase/fail");
+      } finally {
+        setIsLoading(false);
+      }
     };
     getPaymentReady();
-  }, [router, readyRequestBody, TOKEN, API_URL]);
+  }, []);
 
-  return (
-    <>
-      <div
-        className={style.over}
-        style={props.isOpen ? { display: "block" } : { display: "none" }}
-      >
+  if (isLoading) {
+    return (
+      <div className={style.loaderContainer}>
         <PageLoader text="결제 페이지로 이동합니다." />
       </div>
-    </>
-  );
+    );
+  }
+
+  return <></>;
 }
